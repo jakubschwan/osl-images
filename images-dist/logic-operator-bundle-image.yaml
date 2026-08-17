@@ -53,6 +53,8 @@ labels:
     value: scorecard+v1
   - name: com.redhat.delivery.operator.bundle
     value: "true"
+  # TODO: Once backward compatibility with OCP <=4.20 is dropped, update this to v4.21,
+  #       move the NP manifests into this module, and delete images-dist-ocp421/.
   - name: com.redhat.openshift.versions
     value: v4.13
 

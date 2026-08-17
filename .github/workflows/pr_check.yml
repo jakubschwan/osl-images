@@ -6,6 +6,8 @@ on:
     types: [opened, reopened, ready_for_review, synchronize]
     paths:
       - 'apps-maven-builder/**'
+      - 'images-dist/**'
+      - 'images-dist-ocp421/**'
       - '.github/**'
 
 jobs:

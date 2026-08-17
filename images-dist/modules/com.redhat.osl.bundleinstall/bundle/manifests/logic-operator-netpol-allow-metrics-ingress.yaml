@@ -1,0 +1,16 @@
+# Allow Prometheus or monitoring infrastructure to scrape the
+# kube-rbac-proxy metrics endpoint on port 8443/TCP.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: logic-operator-allow-ingress-metrics
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: sonataflow-operator
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 8443
+  policyTypes:
+  - Ingress

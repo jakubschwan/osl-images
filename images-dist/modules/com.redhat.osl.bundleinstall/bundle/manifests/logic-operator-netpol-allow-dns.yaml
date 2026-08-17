@@ -1,0 +1,21 @@
+# Allow OSL operator pods to resolve DNS via the cluster DNS service.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: logic-operator-allow-egress-to-dns
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: sonataflow-operator
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: openshift-dns
+    ports:
+    - protocol: TCP
+      port: 5353
+    - protocol: UDP
+      port: 5353
+  policyTypes:
+  - Egress

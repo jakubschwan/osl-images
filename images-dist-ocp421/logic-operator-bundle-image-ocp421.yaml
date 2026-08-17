@@ -1,0 +1,87 @@
+# Copyright 2024 Apache Software Foundation (ASF)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+schema_version: 1
+name: "openshift-serverless-1/logic-operator-bundle-ocp421"
+description: "OpenShift Serverless Logic Operator Bundle (OCP 4.21+ variant with NetworkPolicy)"
+version: "main"
+from: "scratch"
+
+labels:
+  - name: maintainer
+    value: bsig-cloud@redhat.com
+  - name: com.redhat.component
+    value: openshift-serverless-1-logic-operator-bundle-ocp421-container
+  - name: io.k8s.description
+    value: Operator Bundle for deploying OpenShift Serverless Logic Operator (OCP 4.21+)
+  - name: io.k8s.display-name
+    value: Red Hat OpenShift Serverless Logic Operator Bundle (OCP 4.21+)
+  - name: io.openshift.tags
+    value: osl,logic,sonataflow,serverless,workflow,operator
+  - name: operators.operatorframework.io.bundle.mediatype.v1
+    value: registry+v1
+  - name: operators.operatorframework.io.bundle.manifests.v1
+    value: manifests/
+  - name: operators.operatorframework.io.bundle.metadata.v1
+    value: metadata/
+  - name: operators.operatorframework.io.bundle.package.v1
+    value: logic-operator
+  - name: operators.operatorframework.io.bundle.channels.v1
+    value: "stable"
+  - name: operators.operatorframework.io.bundle.channel.default.v1
+    value: stable
+  - name: operators.operatorframework.io.metrics.mediatype.v1
+    value: metrics+v1
+  - name: operators.operatorframework.io.metrics.builder
+    value: operator-sdk-v1.25.0
+  - name: operators.operatorframework.io.metrics.project_layout
+    value: go.kubebuilder.io/v3
+  - name: operators.operatorframework.io.test.config.v1
+    value: tests/scorecard/
+  - name: operators.operatorframework.io.test.mediatype.v1
+    value: scorecard+v1
+  - name: com.redhat.delivery.operator.bundle
+    value: "true"
+  # OCP 4.21+ required to support NetworkPolicy resources in OLM bundles.
+  # TODO: Once backward compatibility with OCP <=4.20 is dropped, remove this variant and
+  #       update com.redhat.openshift.versions in logic-operator-bundle-image.yaml to v4.21.
+  - name: com.redhat.openshift.versions
+    value: v4.21
+
+modules:
+  repositories:
+    - path: modules
+  install:
+    - name: com.redhat.osl.bundleinstall.ocp421
+
+packages:
+  content_sets_file: content_sets.yaml
+
+osbs:
+  configuration:
+    container:
+      operator_manifests:
+        enable_digest_pinning: true
+        enable_repo_replacements: true
+        enable_registry_replacements: true
+        manifests_dir: "manifests"
+      platforms:
+        only:
+          - x86_64
+          - aarch64
+          - ppc64le
+  extra_dir: osbs-extra
+  repository:
+    name: containers/openshift-serverless-1-logic-operator-bundle-ocp421
+    branch: openshift-serverless-main-rhel-9-ocp421
